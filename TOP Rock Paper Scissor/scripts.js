@@ -11,25 +11,32 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
   }
 
-function getHumanChoice() {
-   let value = prompt("Rock, Paper, or Scissors?");
-   console.log("human choice is ", value);
-   return value;
+function updateScore(whoScored, newScore){
+    if (whoScored == "player"){
+        document.querySelector("#humScore").textContent = `Human score is: ${newScore}`;
+    }
+    else if(whoScored == "computer"){
+        document.querySelector("#comScore").textContent = `Computer score is: ${newScore}`;
+    }
+
 }
 
-function playRound(humanChoice, computerChoice){
-    computerChoice = getComputerChoice();
-    humanChoice = getHumanChoice();
-    humanChoice = humanChoice.toLowerCase();
+
+function playRound(humanChoice){
+    let computerChoice = getComputerChoice();
+
     if (humanChoice == "rock" && computerChoice =="paper")
         {
             console.log("Computer wins round!")
             computerScore = computerScore+=1;
+            updateScore("computer",computerScore);
         }
     else if (humanChoice == "rock" && computerChoice =="scissors")
     {
         console.log("You win the round!")
         humanScore = humanScore+=1;
+        updateScore("player",humanScore);
+
     }
     else if (humanChoice == "rock" && computerChoice =="rock")
     {
@@ -44,17 +51,23 @@ function playRound(humanChoice, computerChoice){
     {
         console.log("Computer win the round!")
         computerScore = computerScore+=1;
+        updateScore("computer",computerScore);
+
     }
     else if (humanChoice == "paper" && computerChoice =="rock")
     {
         console.log("You win the round!")
         humanScore = humanScore+=1;
+        updateScore("player",humanScore);
+
     }
 
     else if (humanChoice == "scissors" && computerChoice =="paper")
     {
         console.log("You win the round!")
         humanScore = humanScore+=1;
+        updateScore("player",humanScore);
+
     }
     else if (humanChoice == "scissors" && computerChoice =="scissors")
     {
@@ -64,15 +77,31 @@ function playRound(humanChoice, computerChoice){
     {
         console.log("Computer win the round!")
         computerScore = computerScore+=1;
+        updateScore("computer",computerScore);
+
     }
+    else {
+        console.log("Error, no point awarded.")
+    }
+
     console.log("Player score = ", humanScore,  "and Computer score = ", computerScore);
+    if (computerScore >= 5){
+        const winner = document.createElement("winner");
+            winner.textContent= `Computer wins the game!`;
+            document.body.appendChild(winner);
+        
+    }
+    else if (humanScore >=5){
+        winner.textContent= `Player wins the game!`;
+        document.body.appendChild(winner);
+    }
+    return 
 }
 
 let humanScore = 0
 let computerScore = 0
 
 function playGame() {
-    for (let i = 0; i < 50; i++) {
     playRound();
     if (computerScore >= 5) {
         console.log("Computer has 5 points, computer wins!");
@@ -81,7 +110,19 @@ function playGame() {
     if (humanScore >= 5) {
         console.log("Player has 5 points, Player wins!");
         return;
-    }
+    
 }
 }
-playGame();
+console.log("Test");
+
+const buttons = document.querySelectorAll("button");
+
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      console.log("button clicked");
+      let humanChoice = button.id;
+      playRound(humanChoice);
+    });
+  });
+
+//playGame();
